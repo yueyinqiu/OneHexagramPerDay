@@ -1,0 +1,12 @@
+﻿<Router AppAssembly="@typeof(App).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" DefaultLayout="@typeof(MainLayout)" />
+        <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+    </Found>
+    <NotFound>
+        <PageTitle>一日一卦 - 找不到页面</PageTitle>
+        <LayoutView Layout="@typeof(MainLayout)">
+            <p role="alert">没有找到此页面，请检查网址是否正确。</p>
+        </LayoutView>
+    </NotFound>
+</Router>
