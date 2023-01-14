@@ -1,27 +1,100 @@
-﻿@using com.nlf.calendar;
+﻿@using OneHexagramPerDayCore;
+@using YiJingFramework.Core;
+@using BlazorApp.Services;
+@using System.Diagnostics;
+@using YiJingFramework.Painting.Presenting.Extensions;
 
 @page "/"
 
-<PageTitle>一日一卦 - 主页</PageTitle>
+@inject ZhouyiStoreProvider ZhouyiStoreProvider
 
-<h1>一日一卦</h1>
+<PageTitle>一日一卦</PageTitle>
 
-<p></p>
+@if (hexagramToShow == hexagramToday)
+{
+    @if (hexagramName is null)
+    {
+        <h1>@hexagramChar 今日之卦</h1>
+        <p>一日一卦获取中……</p>
+    }
+    else
+    {
+        <h1>@hexagramChar @hexagramName</h1>
+        <p>一日一卦于 @DateTimeString</p>
+    }
+}
+else
+{
+    @if (hexagramName is null)
+    {
+        <h1>@hexagramChar 卦爻辞查询中……</h1>
+    }
+    else
+    {
+        <h1>@hexagramChar @hexagramName</h1>
+    }
+}
 
-<p>欢迎访问一日一卦！</p>
+<Hexagram Painting=@hexagramToShow></Hexagram>
 
-<p>此网站是微信公众号“一日一卦”的衍生。正如其名，每天都会有不同的一卦作为今日之卦。</p>
+<Footer></Footer>
 
-<p>一开始的想法是，打开网站就显示今日之卦的卦爻辞，而无其他任何功能。</p>
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery(Name = "p")]
+    public string? PaintingToShowInString { get; set; }
 
-<p>但经过考虑，我们决定提供自由的查询功能，而今日之卦则会作为进入查询界面时默认显示的卦。</p>
+    private string? hexagramName;
+    private char? hexagramChar;
+    private Painting hexagramToday;
+    private Painting? hexagramToShow;
 
-<p>由于网站初建，还没有做成完整的交互功能，目前仅可通过在网址中输入参数进行查询。</p>
+    protected override void OnParametersSet()
+    {
+        if (string.IsNullOrWhiteSpace(PaintingToShowInString))
+            hexagramToShow = hexagramToday;
+        else
+            _ = Painting.TryParse(PaintingToShowInString, out hexagramToShow);
 
-<p>其格式为 p=初二三四五六 ，如 /query?p=111111 将查询乾卦， /query?p=000000 则可查询坤卦。</p>
+        if (hexagramToShow is not null && hexagramToShow.Count is 6)
+            hexagramChar = hexagramToShow.ToUnicodeCharacter();
+    }
 
-<p>本网站使用 <a href="https://github.com/YiJingFramework/YiJingFramework.Core/wiki" target="_blank">YiJingFramework</a> 获取卦爻辞。</p>
+    protected override async Task OnParametersSetAsync()
+    {
+        var zhouyi = await ZhouyiStoreProvider.GetZhouyiStoreAsync();
 
-<p>具体使用的翻译为经 f1cffa73-2af9-4593-aeb6-fa409baaaaa3 ，传 b4d54da8-6839-4762-a728-04dfbf160b0a 。均未经过严格的人工检查。</p>
+        if (hexagramToShow is not null && hexagramToShow.Count is 6)
+        {
+            var hex = zhouyi.GetHexagram(hexagramToShow);
 
- 
+            var (upperPainting, lowerPainting) = hex.SplitToTrigrams();
+
+            var upper = zhouyi.GetTrigram(upperPainting);
+            var lower = zhouyi.GetTrigram(lowerPainting);
+
+            hexagramName = upperPainting == lowerPainting ?
+                $"{hex.Name}為{upper.Nature}" :
+                $"{upper.Nature}{lower.Nature}{hex.Name}";
+        }
+
+    }
+
+    private readonly DateOnly date;
+    private readonly Lunar.Lunar lunar;
+    public Index()
+    {
+        var current = DateTime.Now;
+        this.date = DateOnly.FromDateTime(current);
+        lunar = Lunar.Lunar.FromDate(date.ToDateTime(new TimeOnly(6, 30)));
+        hexagramToday = HexagramProvider.Default.GetHexagram(date);
+    }
+
+    private string DateTimeString
+    {
+        get
+        {
+            return $"{lunar.YearInGanZhi}年{lunar.MonthInChinese}月{lunar.DayInChinese} {date:yyyy/MM/dd}";
+        }
+    }
+}

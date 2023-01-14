@@ -1,25 +1,26 @@
-﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <BlazorCacheBootResources>false</BlazorCacheBootResources>
+    <ServiceWorkerAssetsManifest>service-worker-assets.js</ServiceWorkerAssetsManifest>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="lunar-csharp" Version="1.2.19" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="6.0.9" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="6.0.9" PrivateAssets="all" />
-    <PackageReference Include="YiJingFramework.Core" Version="4.1.0" />
-    <PackageReference Include="YiJingFramework.Painting.Deriving" Version="3.1.0" />
-    <PackageReference Include="YiJingFramework.Painting.Presenting" Version="3.0.1" />
-    <PackageReference Include="YiJingFramework.References.Zhouyi" Version="5.0.1" />
-    <PackageReference Include="YiJingFramework.References.Zhouyi.Zhuan" Version="3.0.1" />
+    <PackageReference Include="lunar-csharp" Version="1.4.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.2" PrivateAssets="all" />
+    <PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="3.1.1" />
+    <PackageReference Include="YiJingFramework.Painting.Presenting" Version="4.1.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\HexagramProvider\HexagramProvider.csproj" />
+    <ProjectReference Include="..\OneHexagramPerDayCore\OneHexagramPerDayCore.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ServiceWorker Include="wwwroot\service-worker.js" PublishedContent="wwwroot\service-worker.published.js" />
   </ItemGroup>
 
 </Project>

@@ -1,9 +1,13 @@
 ﻿using YiJingFramework.Core;
 
-namespace HexagramProvider
+namespace OneHexagramPerDayCore
 {
-    public static class Provider
+    public sealed class HexagramProvider
     {
+        private HexagramProvider() { }
+
+        public static HexagramProvider Default { get; } = new HexagramProvider();
+
         private static IEnumerable<YinYang> RandomYinYangs(int seed)
         {
             Random random = new Random(seed);
@@ -11,7 +15,7 @@ namespace HexagramProvider
                 yield return (YinYang)random.Next(0, 2);
         }
 
-        public static Painting GetHexagram(DateOnly date)
+        public Painting GetHexagram(DateOnly date)
         {
             var seed = date.DayNumber;
             return new Painting(RandomYinYangs(seed).Take(6));
