@@ -11,13 +11,13 @@ File.WriteAllText("zhouyi.json", store.SerializeToJsonString());
 var yinLineTitles = new[] { "初六：", "六二：", "六三：", "六四：", "六五：", "上六：" };
 var yangLineTitles = new[] { "初九：", "九二：", "九三：", "九四：", "九五：", "上九：" };
 
-for(int i = 0; i < 64; i++)
+for (int i = 0; i < 64; i++)
 {
     var painting = Painting.Parse(Convert.ToString(i, 2).PadLeft(6, '0'));
     var hexagram = store.GetHexagram(painting);
 
     var lines = hexagram.EnumerateLines(false).ToArray();
-    for(int j = 0; j < 6; j++)
+    for (int j = 0; j < 6; j++)
     {
         if (lines[j].YinYang == YinYang.Yang)
         {
@@ -29,11 +29,11 @@ for(int i = 0; i < 64; i++)
         }
     }
 
-    if(hexagram.Index == "1")
+    if (hexagram.Index == "1")
     {
         hexagram.Yong.LineText = "用九：" + hexagram.Yong.LineText;
     }
-    else if(hexagram.Index == "0")
+    else if (hexagram.Index == "0")
     {
         hexagram.Yong.LineText = "用六：" + hexagram.Yong.LineText;
     }

@@ -11,14 +11,14 @@ namespace BlazorApp.Services
         private readonly Uri baseUri;
         public ZhouyiStoreProvider(string baseAddress)
         {
-            this.baseUri = new Uri(baseAddress);
+            baseUri = new Uri(baseAddress);
         }
 
         private ZhouyiStore? store;
 
         public async Task<ZhouyiStore> GetZhouyiStoreAsync()
         {
-            if (this.store is null)
+            if (store is null)
             {
                 var httpClient = new HttpClient() { BaseAddress = baseUri };
                 using (var stream = await httpClient.GetStreamAsync("data/zhouyi.json"))
@@ -29,7 +29,7 @@ namespace BlazorApp.Services
                     this.store = store;
                 }
             }
-            return this.store;
+            return store;
         }
     }
 }
