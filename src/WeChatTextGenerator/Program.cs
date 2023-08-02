@@ -5,6 +5,7 @@ using WeChatTextGenerator;
 using YiJingFramework.Annotating.Zhouyi;
 
 var outputDirectory = new DirectoryInfo("./out");
+outputDirectory.Create();
 Console.WriteLine(
     $"请注意，在生成后，剪切板的内容会被替换为要使用的原文链接。" +
     $"同时，输出文件夹 {outputDirectory.FullName} 中的内容会被删除。");
