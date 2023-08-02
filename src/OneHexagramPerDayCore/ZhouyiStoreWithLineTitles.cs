@@ -24,9 +24,6 @@ public sealed class ZhouyiStoreWithLineTitles
         {
             var hexagram = this.InnerStore.GetHexagram(gua);
 
-            Console.WriteLine(gua);
-            Console.WriteLine(hexagram.Name);
-
             hexagram.Text = $"{hexagram.Name}：{hexagram.Text}";
             hexagram.Xiang = $"象曰：{hexagram.Xiang}";
             hexagram.Tuan = $"彖曰：{hexagram.Tuan}";

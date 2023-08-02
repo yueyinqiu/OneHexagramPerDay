@@ -8,7 +8,7 @@ using YiJingFramework.PrimitiveTypes.GuaWithFixedCount;
 
 var current = DateTime.Now;
 
-DateOnly ParseToDateTime(string s, string? format = null)
+static DateOnly ParseToDateTime(string s, string? format = null)
 {
     format = format ?? "yyyyMMdd";
     return DateOnly.ParseExact(s, format);
@@ -30,17 +30,17 @@ internal partial class Program
     private readonly DateOnly date;
     private readonly GuaHexagram hexagramPainting;
 
-    private readonly ZhouyiStore zhouyi;
+    private readonly ZhouyiStoreWithLineTitles zhouyi;
 
     internal Program(DateOnly date)
     {
         this.date = date;
         this.hexagramPainting = new HexagramProvider(date).GetHexagram();
 
-        var storeContent = File.ReadAllText("./zhouyi-WeChatTextGenerator.json");
+        var storeContent = File.ReadAllText("./zhouyi.json");
         var zhouyi = ZhouyiStore.DeserializeFromJsonString(storeContent);
         Debug.Assert(zhouyi is not null);
-        this.zhouyi = zhouyi;
+        this.zhouyi = new(zhouyi);
     }
 
     internal void Run()
@@ -55,17 +55,17 @@ internal partial class Program
         Console.WriteLine();
         Console.WriteLine();
 
-        ZhouyiHexagram hexagram = this.zhouyi.GetHexagram(this.hexagramPainting);
+        ZhouyiHexagram hexagram = this.zhouyi[this.hexagramPainting];
 
         var (upperPainting, lowerPainting) = hexagram.SplitToTrigrams();
 
-        ZhouyiTrigram upper = this.zhouyi.GetTrigram(upperPainting);
-        ZhouyiTrigram lower = this.zhouyi.GetTrigram(lowerPainting);
+        ZhouyiTrigram upper = this.zhouyi.InnerStore.GetTrigram(upperPainting);
+        ZhouyiTrigram lower = this.zhouyi.InnerStore.GetTrigram(lowerPainting);
 
         Console.WriteLine("====标题================");
         Console.Write(this.hexagramPainting.ToUnicodeChar());
         if (upperPainting == lowerPainting)
-            Console.WriteLine($" {hexagram.Name}為{upper.Nature} {lunarStr}");
+            Console.WriteLine($" {hexagram.Name}为{upper.Nature} {lunarStr}");
         else
             Console.WriteLine($" {upper.Nature}{lower.Nature}{hexagram.Name} {lunarStr}");
         Console.WriteLine("========================");
@@ -73,9 +73,9 @@ internal partial class Program
         Console.WriteLine();
 
         Console.WriteLine("====正文================");
-        Console.WriteLine($"{hexagram.Name}：{hexagram.Text}");
-        Console.WriteLine($"象曰：{hexagram.Xiang}");
-        Console.WriteLine($"彖曰：{hexagram.Tuan}");
+        Console.WriteLine(hexagram.Text);
+        Console.WriteLine(hexagram.Xiang);
+        Console.WriteLine(hexagram.Tuan);
         Console.WriteLine();
 
         foreach (var line in hexagram.EnumerateLines())
@@ -83,7 +83,7 @@ internal partial class Program
             if (line.LineText is not null)
             {
                 Console.WriteLine(line.LineText);
-                Console.WriteLine($"象曰：{line.Xiang}");
+                Console.WriteLine(line.Xiang);
             }
         }
 
