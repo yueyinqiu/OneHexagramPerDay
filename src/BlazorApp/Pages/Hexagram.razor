@@ -1,12 +1,12 @@
-﻿@using YiJingFramework.Core
+﻿@using YiJingFramework.PrimitiveTypes
 @using System.Diagnostics;
 @using BlazorApp.Services;
 
 @inject ZhouyiStoreProvider ZhouyiStoreProvider
 
-@if (info is null)
+@if (hexagram is null)
 {
-    @if(badPainting)
+    @if (Painting is null)
     {
         <p>未能解析参数，请检查网址是否正确。</p>
     }
@@ -18,90 +18,19 @@
 else
 {
     <p>
-        @info.Text <br />
-        @info.Xiang <br />
-        @info.Tuan <br />
+        @hexagram.Text <br />
+        @hexagram.Xiang <br />
+        @hexagram.Tuan <br />
     </p>
 
     <p>
-        @foreach(var line in info.SixLines)
+        @foreach (var line in hexagram.EnumerateLines())
         {
-            @line.Text <br />
-            @line.Xiang <br />
-        }
-        @if(info.ApplyLine is not null)
-        {
-            @info.ApplyLine.Text <br />
-            @info.ApplyLine.Xiang <br />
+            if (line.LineText is not null)
+            {
+                @line.LineText <br />
+                @line.Xiang <br />
+            }
         }
     </p>
-}
-
-@code {
-    private sealed record Line(string Text, string Xiang);
-    private sealed record HexagramInfo(
-        string Text,
-        string Xiang,
-        string Tuan,
-        List<Line> SixLines,
-        Line? ApplyLine)
-    { }
-
-    [Parameter]
-    public Painting? Painting { get; set; }
-
-    private HexagramInfo? info;
-
-    private bool badPainting;
-
-    private static readonly Painting qianPainting = new Painting(Enumerable.Repeat(YinYang.Yang, 6));
-    private static readonly Painting kunPainting = new Painting(Enumerable.Repeat(YinYang.Yin, 6));
-    protected override async Task OnParametersSetAsync()
-    {
-        var store = await ZhouyiStoreProvider.GetZhouyiStoreAsync();
-
-        badPainting = Painting is null || Painting.Count is not 6;
-        if (badPainting)
-            return;
-        Debug.Assert(Painting is not null);
-
-        var hexagram = store.GetHexagram(Painting);
-
-        var hexagramText = $"{hexagram.Name}：{hexagram.Text}";
-        var hexagramXiang = $"象曰：{hexagram.Xiang}";
-        var tuan = $"彖曰：{hexagram.Tuan}";
-
-        var lines = new List<Line>(6);
-        foreach (var line in hexagram.EnumerateLines(false))
-        {
-            Debug.Assert(line.YinYang.HasValue);
-            var text = line.YinYang.Value.IsYang ? "九" : "六";
-            text = line.LineIndex switch
-            {
-                1 => $"初{text}：{line.LineText}",
-                2 => $"{text}二：{line.LineText}",
-                3 => $"{text}三：{line.LineText}",
-                4 => $"{text}四：{line.LineText}",
-                5 => $"{text}五：{line.LineText}",
-                _ => $"上{text}：{line.LineText}",
-            };
-            lines.Add(new Line(text, $"象曰：{line.Xiang}"));
-        }
-
-        Line? yong;
-        if (hexagram.Painting == qianPainting)
-        {
-            yong = new Line($"用九：{hexagram.Yong.LineText}", $"象曰：{hexagram.Yong.Xiang}");
-        }
-        else if (hexagram.Painting == kunPainting)
-        {
-            yong = new Line($"用六：{hexagram.Yong.LineText}", $"象曰：{hexagram.Yong.Xiang}");
-        }
-        else
-        {
-            yong = null;
-        }
-
-        this.info = new HexagramInfo(hexagramText, hexagramXiang, tuan, lines, yong);
-    }
 }

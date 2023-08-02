@@ -1,35 +1,38 @@
-﻿
-using BlazorApp.Serialization;
-using System.Diagnostics;
-using System.Text.Json;
-using YiJingFramework.Annotating.Zhouyi;
+﻿using BlazorApp.Serialization;
+using OneHexagramPerDayCore;
+using System.Net.Http.Json;
 
 namespace BlazorApp.Services
 {
     public sealed class ZhouyiStoreProvider
     {
-        private readonly Uri baseUri;
-        public ZhouyiStoreProvider(string baseAddress)
+        private readonly Task<ZhouyiStoreWithLineTitles> getStoreTask;
+
+        private static async Task<ZhouyiStoreWithLineTitles> RunGetZhouyiStoreTask(Uri baseUri)
         {
-            baseUri = new Uri(baseAddress);
+            using var httpClient = new HttpClient()
+            {
+                BaseAddress = baseUri
+            };
+            var zhouyiLocation = await httpClient.GetFromJsonAsync(
+                "data/zhouyi-location.json",
+                StringSerializerContext.Default.String);
+            var store = await httpClient.GetFromJsonAsync(
+                "data/zhouyi-2023-08-02.json",
+                ZhouyiStoreSerializerContext.Default.ZhouyiStore);
+            return store is null ?
+                throw new InvalidDataException("Failed to load the zhouyi store.") :
+                new(store);
         }
 
-        private ZhouyiStore? store;
-
-        public async Task<ZhouyiStore> GetZhouyiStoreAsync()
+        public ZhouyiStoreProvider(string baseAddress)
         {
-            if (store is null)
-            {
-                var httpClient = new HttpClient() { BaseAddress = baseUri };
-                using (var stream = await httpClient.GetStreamAsync("data/zhouyi.json"))
-                {
-                    var typeInfo = ZhouyiStoreSerializerContext.Default.ZhouyiStore;
-                    var store = JsonSerializer.Deserialize(stream, typeInfo);
-                    Debug.Assert(store is not null);
-                    this.store = store;
-                }
-            }
-            return store;
+            this.getStoreTask = RunGetZhouyiStoreTask(new(baseAddress));
+        }
+
+        public async Task<ZhouyiStoreWithLineTitles> GetZhouyiStoreAsync()
+        {
+            return await this.getStoreTask;
         }
     }
 }

@@ -10,11 +10,11 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="lunar-csharp" Version="1.4.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.2" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.2" PrivateAssets="all" />
-		<PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="3.1.1" />
-		<PackageReference Include="YiJingFramework.Painting.Presenting" Version="4.1.0" />
+		<PackageReference Include="lunar-csharp" Version="1.5.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.9" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.9" PrivateAssets="all" />
+		<PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="5.0.0" />
+		<PackageReference Include="YiJingFramework.EntityRelationships.MostAccepted" Version="2.0.0" />
 	</ItemGroup>
 
 	<ItemGroup>

@@ -8,13 +8,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="3.1.1" />
+    <PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Update="input.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+    <ProjectReference Include="..\OneHexagramPerDayCore\OneHexagramPerDayCore.csproj" />
   </ItemGroup>
 
 </Project>

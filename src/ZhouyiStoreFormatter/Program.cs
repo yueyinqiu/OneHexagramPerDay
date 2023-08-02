@@ -1,51 +1,44 @@
 ﻿using System.Diagnostics;
 using YiJingFramework.Annotating.Zhouyi;
-using YiJingFramework.Core;
 
-var s = File.ReadAllText("./input.json");
+var storeLink = "https://yueyinqiu.github.io/my-yijing-annotation-stores/975345ca/2023-08-02-1.json";
+using var httpClient = new HttpClient();
+var s = await httpClient.GetStringAsync(storeLink);
 var store = ZhouyiStore.DeserializeFromJsonString(s);
 Debug.Assert(store is not null);
 
-File.WriteAllText("zhouyi.json", store.SerializeToJsonString());
+store.Tags.Clear();
+store.Tags.Add(
+    $"This store file was edited from `{storeLink}` for OneHexagramPerDay's use. " +
+    $"Some unused entries have been removed.");
 
-var yinLineTitles = new[] { "初六：", "六二：", "六三：", "六四：", "六五：", "上六：" };
-var yangLineTitles = new[] { "初九：", "九二：", "九三：", "九四：", "九五：", "上九：" };
+store.Title = $"{store.Title} For OneHexagramPerDay";
 
-for (int i = 0; i < 64; i++)
-{
-    var painting = Painting.Parse(Convert.ToString(i, 2).PadLeft(6, '0'));
-    var hexagram = store.GetHexagram(painting);
+var xugua = store.GetXugua();
+xugua.Content = null;
+store.UpdateStore(xugua);
 
-    var lines = hexagram.EnumerateLines(false).ToArray();
-    for (int j = 0; j < 6; j++)
+var zagua = store.GetZagua();
+zagua.Content = null;
+store.UpdateStore(zagua);
+
+var xici = store.GetXici();
+xici.PartA = null;
+xici.PartB = null;
+store.UpdateStore(xici);
+
+var shuogua = store.GetShuogua();
+shuogua.Content = null;
+store.UpdateStore(shuogua);
+
+await File.WriteAllTextAsync(
+    $"zhouyi-{DateTime.Now:yyyy-MM-dd}.json",
+    store.SerializeToJsonString());
+
+await File.WriteAllTextAsync(
+    "zhouyi-WeChatTextGenerator.json",
+    store.SerializeToJsonString(new()
     {
-        if (lines[j].YinYang == YinYang.Yang)
-        {
-            lines[j].LineText = yangLineTitles[j] + lines[j].LineText;
-        }
-        else
-        {
-            lines[j].LineText = yinLineTitles[j] + lines[j].LineText;
-        }
-    }
-
-    if (hexagram.Index == "1")
-    {
-        hexagram.Yong.LineText = "用九：" + hexagram.Yong.LineText;
-    }
-    else if (hexagram.Index == "0")
-    {
-        hexagram.Yong.LineText = "用六：" + hexagram.Yong.LineText;
-    }
-    else
-    {
-        hexagram.Yong.LineText = null;
-    }
-
-    store.UpdateStore(hexagram);
-}
-
-File.WriteAllText("zhouyi-WeChatTextGenerator.json", store.SerializeToJsonString(new() {
-    WriteIndented = true,
-    Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
-}));
+        WriteIndented = true,
+        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    }));

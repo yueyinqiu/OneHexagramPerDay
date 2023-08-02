@@ -1,8 +1,6 @@
 ﻿@using OneHexagramPerDayCore;
-@using YiJingFramework.Core;
 @using BlazorApp.Services;
 @using System.Diagnostics;
-@using YiJingFramework.Painting.Presenting.Extensions;
 
 @page "/"
 
@@ -38,63 +36,3 @@ else
 <Hexagram Painting=@hexagramToShow></Hexagram>
 
 <Footer></Footer>
-
-@code {
-    [Parameter]
-    [SupplyParameterFromQuery(Name = "p")]
-    public string? PaintingToShowInString { get; set; }
-
-    private string? hexagramName;
-    private char? hexagramChar;
-    private Painting hexagramToday;
-    private Painting? hexagramToShow;
-
-    protected override void OnParametersSet()
-    {
-        if (string.IsNullOrWhiteSpace(PaintingToShowInString))
-            hexagramToShow = hexagramToday;
-        else
-            _ = Painting.TryParse(PaintingToShowInString, out hexagramToShow);
-
-        if (hexagramToShow is not null && hexagramToShow.Count is 6)
-            hexagramChar = hexagramToShow.ToUnicodeCharacter();
-    }
-
-    protected override async Task OnParametersSetAsync()
-    {
-        var zhouyi = await ZhouyiStoreProvider.GetZhouyiStoreAsync();
-
-        if (hexagramToShow is not null && hexagramToShow.Count is 6)
-        {
-            var hex = zhouyi.GetHexagram(hexagramToShow);
-
-            var (upperPainting, lowerPainting) = hex.SplitToTrigrams();
-
-            var upper = zhouyi.GetTrigram(upperPainting);
-            var lower = zhouyi.GetTrigram(lowerPainting);
-
-            hexagramName = upperPainting == lowerPainting ?
-                $"{hex.Name}為{upper.Nature}" :
-                $"{upper.Nature}{lower.Nature}{hex.Name}";
-        }
-
-    }
-
-    private readonly DateOnly date;
-    private readonly Lunar.Lunar lunar;
-    public Index()
-    {
-        var current = DateTime.Now;
-        this.date = DateOnly.FromDateTime(current);
-        lunar = Lunar.Lunar.FromDate(date.ToDateTime(new TimeOnly(6, 30)));
-        hexagramToday = HexagramProvider.Default.GetHexagram(date);
-    }
-
-    private string DateTimeString
-    {
-        get
-        {
-            return $"{lunar.YearInGanZhi}年{lunar.MonthInChinese}月{lunar.DayInChinese} {date:yyyy/MM/dd}";
-        }
-    }
-}

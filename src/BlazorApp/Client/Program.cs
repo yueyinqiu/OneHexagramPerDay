@@ -12,8 +12,7 @@ namespace BlazorApp
             builder.RootComponents.Add<App>("#app");
             builder.RootComponents.Add<HeadOutlet>("head::after");
 
-            builder.Services.AddScoped(
-                _ => new ZhouyiStoreProvider(builder.HostEnvironment.BaseAddress));
+            builder.Services.AddSingleton(new ZhouyiStoreProvider(builder.HostEnvironment.BaseAddress));
 
             await builder.Build().RunAsync();
         }

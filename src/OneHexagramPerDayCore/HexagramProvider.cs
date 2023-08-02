@@ -1,24 +1,26 @@
-﻿using YiJingFramework.Core;
+﻿using YiJingFramework.PrimitiveTypes;
+using YiJingFramework.PrimitiveTypes.GuaWithFixedCount;
 
-namespace OneHexagramPerDayCore
+namespace OneHexagramPerDayCore;
+
+public sealed class HexagramProvider
 {
-    public sealed class HexagramProvider
+    public int Seed { get; }
+    public HexagramProvider(int seed)
     {
-        private HexagramProvider() { }
+        this.Seed = seed;
+    }
+    public HexagramProvider(DateOnly date) : this(date.DayNumber) { }
 
-        public static HexagramProvider Default { get; } = new HexagramProvider();
+    private IEnumerable<Yinyang> RandomYinYangs()
+    {
+        Random random = new Random(this.Seed);
+        for (; ; )
+            yield return (Yinyang)random.Next(0, 2);
+    }
 
-        private static IEnumerable<YinYang> RandomYinYangs(int seed)
-        {
-            Random random = new Random(seed);
-            for (; ; )
-                yield return (YinYang)random.Next(0, 2);
-        }
-
-        public Painting GetHexagram(DateOnly date)
-        {
-            var seed = date.DayNumber;
-            return new Painting(RandomYinYangs(seed).Take(6));
-        }
+    public GuaHexagram GetHexagram()
+    {
+        return new GuaHexagram(this.RandomYinYangs().Take(6));
     }
 }
