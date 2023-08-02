@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
@@ -10,6 +10,7 @@
   <ItemGroup>
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
     <PackageReference Include="lunar-csharp" Version="1.5.3" />
+    <PackageReference Include="TextCopy" Version="6.2.1" />
     <PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="5.0.0" />
     <PackageReference Include="YiJingFramework.EntityRelationships.MostAccepted" Version="2.0.0" />
   </ItemGroup>
@@ -20,9 +21,6 @@
 
   <ItemGroup>
     <None Update="cover.jpg">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-    <None Update="readme.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="zhouyi.json">
