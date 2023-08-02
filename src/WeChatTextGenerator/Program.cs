@@ -24,14 +24,20 @@ DocumentGenerator generator = new DocumentGenerator(outputDirectory, zhouyi);
 for (; ; )
 {
     var hexagram = new HexagramProvider(currentDate).GetHexagram();
+    var lunar = Lunar.Lunar.FromDate(currentDate.ToDateTime(new TimeOnly(6, 30)));
+    Console.WriteLine();
+    Console.WriteLine(
+        $"正在为{lunar.YearInGanZhi}年{lunar.MonthInChinese}月{lunar.DayInChinese}日生成……");
 
     outputDirectory.Delete(true);
-    var lunar = Lunar.Lunar.FromDate(currentDate.ToDateTime(new TimeOnly(6, 30)));
     generator.GenerateFor(hexagram, lunar);
+    Console.WriteLine($"文件生成已完成。");
 
-    ClipboardService.SetText($"https://onehexagramperday.nololiyt.top/?p={hexagram}");
+    var link = $"https://onehexagramperday.nololiyt.top/?p={hexagram}";
+    ClipboardService.SetText(link);
+    Console.WriteLine($"原文链接 {link} 已自动复制。");
 
-    Console.Write("生成完毕，回车以继续：");
+    Console.Write("生成完毕。回车以继续下一日：");
     _ = Console.ReadLine();
     currentDate = currentDate.AddDays(1);
 }
