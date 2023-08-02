@@ -1,4 +1,7 @@
-﻿using OneHexagramPerDayCore;
+﻿using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Wordprocessing;
+using OneHexagramPerDayCore;
 using System.Diagnostics;
 using System.Text;
 using YiJingFramework.Annotating.Zhouyi;
@@ -43,58 +46,59 @@ internal partial class Program
         this.zhouyi = new(zhouyi);
     }
 
+    private static void AppendLine(Body body, string? text = null)
+    {
+        var paragraph = body.AppendChild(new Paragraph());
+        var run = paragraph.AppendChild(new Run());
+        var properties = run.AppendChild(new RunProperties());
+        _ = properties.AppendChild(new FontSize()
+        {
+            Val = "26"
+        });
+        if (text is not null)
+            _ = run.AppendChild(new Text(text));
+    }
+
     internal void Run()
     {
         var lunar = Lunar.Lunar.FromDate(this.date.ToDateTime(new TimeOnly(6, 30)));
         var lunarStr = $"{lunar.YearInGanZhi}年{lunar.MonthInChinese}月{lunar.DayInChinese}";
-
-        Console.WriteLine("====日期================");
-        Console.WriteLine($"{this.date:yyyy/MM/dd}");
-        Console.WriteLine(lunarStr);
-        Console.WriteLine("========================");
-        Console.WriteLine();
-        Console.WriteLine();
+        Console.WriteLine($"{this.date:yyyy/MM/dd} {lunarStr}");
 
         ZhouyiHexagram hexagram = this.zhouyi[this.hexagramPainting];
-
         var (upperPainting, lowerPainting) = hexagram.SplitToTrigrams();
-
         ZhouyiTrigram upper = this.zhouyi.InnerStore.GetTrigram(upperPainting);
         ZhouyiTrigram lower = this.zhouyi.InnerStore.GetTrigram(lowerPainting);
 
-        Console.WriteLine("====标题================");
-        Console.Write(this.hexagramPainting.ToUnicodeChar());
+        var hexagramChar = this.hexagramPainting.ToUnicodeChar();
+        string title;
         if (upperPainting == lowerPainting)
-            Console.WriteLine($" {hexagram.Name}为{upper.Nature} {lunarStr}");
+            title = $"{hexagram.Name}为{upper.Nature} {lunarStr}";
         else
-            Console.WriteLine($" {upper.Nature}{lower.Nature}{hexagram.Name} {lunarStr}");
-        Console.WriteLine("========================");
-        Console.WriteLine();
-        Console.WriteLine();
+            title = $"{upper.Nature}{lower.Nature}{hexagram.Name} {lunarStr}";
 
-        Console.WriteLine("====正文================");
-        Console.WriteLine(hexagram.Text);
-        Console.WriteLine(hexagram.Xiang);
-        Console.WriteLine(hexagram.Tuan);
-        Console.WriteLine();
+        var wordFileInfo = new FileInfo($"./out/{hexagramChar} {title}.docx");
+        wordFileInfo.Directory?.Create();
+        using var word = WordprocessingDocument.Create(
+            wordFileInfo.FullName, WordprocessingDocumentType.Document);
+        var document = new Document();
+        word.AddMainDocumentPart().Document = document;
+        var body = document.AppendChild(new Body());
 
+        AppendLine(body, hexagram.Text);
+        AppendLine(body, hexagram.Xiang);
+        AppendLine(body, hexagram.Tuan);
+        AppendLine(body);
         foreach (var line in hexagram.EnumerateLines())
         {
             if (line.LineText is not null)
             {
-                Console.WriteLine(line.LineText);
-                Console.WriteLine(line.Xiang);
+                AppendLine(body, line.LineText);
+                AppendLine(body, line.Xiang);
             }
         }
+        AppendLine(body, $"https://onehexagramperday.nololiyt.top/?p={this.hexagramPainting}");
 
-        Console.WriteLine("========================");
-        Console.WriteLine();
-        Console.WriteLine();
-
-        Console.WriteLine("====网址================");
-        Console.WriteLine($"https://onehexagramperday.nololiyt.top/?p={this.hexagramPainting}");
-        Console.WriteLine("========================");
-        Console.WriteLine();
-        Console.WriteLine();
+        Console.WriteLine("完成");
     }
 }
