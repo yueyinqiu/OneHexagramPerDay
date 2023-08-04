@@ -1,6 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text.Json;
 using YiJingFramework.Annotating.Zhouyi;
+using YiJingFramework.Annotating.Zhouyi.Entities;
 
 var storeLink = "https://yueyinqiu.github.io/my-yijing-annotation-stores/975345ca/2023-08-02-1.json";
 using var httpClient = new HttpClient();
@@ -8,29 +9,17 @@ var s = await httpClient.GetStringAsync(storeLink);
 var store = ZhouyiStore.DeserializeFromJsonString(s);
 Debug.Assert(store is not null);
 
-store.Tags.Clear();
-store.Tags.Add(
-    $"This store file was edited from `{storeLink}` for OneHexagramPerDay's use. " +
-    $"Some unused entries have been removed.");
-
 store.Title = $"{store.Title} For OneHexagramPerDay";
 
-var xugua = store.GetXugua();
-xugua.Content = null;
-store.UpdateStore(xugua);
+store.Tags.Clear();
+store.Tags.Add(
+    $"此注解仓库专门为 OneHexagramPerDay 进行过调整，可能缺少部分信息。" +
+    $"原仓库：{storeLink}");
 
-var zagua = store.GetZagua();
-zagua.Content = null;
-store.UpdateStore(zagua);
-
-var xici = store.GetXici();
-xici.PartA = null;
-xici.PartB = null;
-store.UpdateStore(xici);
-
-var shuogua = store.GetShuogua();
-shuogua.Content = null;
-store.UpdateStore(shuogua);
+store.UpdateStore(new Shuogua());
+store.UpdateStore(new Xugua());
+store.UpdateStore(new Zagua());
+store.UpdateStore(new Xici());
 
 Directory.CreateDirectory("./For BlazorApp/data");
 var storeName = $"data/zhouyi-{DateTime.Now:yyyy-MM-dd}.json";
