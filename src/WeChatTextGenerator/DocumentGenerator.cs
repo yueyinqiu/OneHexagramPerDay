@@ -4,7 +4,7 @@ using DocumentFormat.OpenXml.Wordprocessing;
 using OneHexagramPerDayCore;
 using YiJingFramework.Annotating.Zhouyi;
 using YiJingFramework.Annotating.Zhouyi.Entities;
-using YiJingFramework.EntityRelationships.MostAccepted.GuaToCharacterExtensions;
+using YiJingFramework.EntityRelations.GuaCharacters.Extensions;
 using YiJingFramework.PrimitiveTypes.GuaWithFixedCount;
 
 namespace WeChatTextGenerator;

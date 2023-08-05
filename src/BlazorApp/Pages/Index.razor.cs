@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using OneHexagramPerDayCore;
-using YiJingFramework.EntityRelationships.MostAccepted.GuaToCharacterExtensions;
+using YiJingFramework.EntityRelations.GuaCharacters.Extensions;
 using YiJingFramework.PrimitiveTypes.GuaWithFixedCount;
 
 namespace BlazorApp.Pages;
