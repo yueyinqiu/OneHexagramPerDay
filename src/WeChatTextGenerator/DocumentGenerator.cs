@@ -33,10 +33,8 @@ internal partial class DocumentGenerator
             _ = run.AppendChild(new Text(text));
     }
 
-    public void GenerateFor(GuaHexagram gua, Lunar.Lunar lunar)
+    public void GenerateFor(GuaHexagram gua, string nongliTimeTitle)
     {
-        var lunarString = $"{lunar.YearInGanZhi}年{lunar.MonthInChinese}月{lunar.DayInChinese}";
-
         ZhouyiHexagram hexagram = this.zhouyi[gua];
         var (upperPainting, lowerPainting) = hexagram.SplitToTrigrams();
         ZhouyiTrigram upper = this.zhouyi.InnerStore.GetTrigram(upperPainting);
@@ -45,9 +43,9 @@ internal partial class DocumentGenerator
         var hexagramChar = gua.ToUnicodeChar();
         string title;
         if (upperPainting == lowerPainting)
-            title = $"{hexagram.Name}为{upper.Nature} {lunarString}";
+            title = $"{hexagram.Name}为{upper.Nature} {nongliTimeTitle}";
         else
-            title = $"{upper.Nature}{lower.Nature}{hexagram.Name} {lunarString}";
+            title = $"{upper.Nature}{lower.Nature}{hexagram.Name} {nongliTimeTitle}";
         var fileName = Path.GetFullPath($"{hexagramChar} {title}.docx", this.directory.FullName);
 
         this.directory.Create();

@@ -1,7 +1,10 @@
 ﻿using Microsoft.AspNetCore.Components;
 using OneHexagramPerDayCore;
+using System.Globalization;
+using System;
 using YiJingFramework.EntityRelations.GuaCharacters.Extensions;
 using YiJingFramework.PrimitiveTypes.GuaWithFixedCount;
+using ChineseLunisolarCalendarYjFwkExtensions.Extensions;
 
 namespace BlazorApp.Pages;
 
@@ -47,12 +50,10 @@ public partial class Index
     }
 
     private readonly DateOnly date;
-    private readonly Lunar.Lunar lunar;
     public Index()
     {
         var current = DateTime.Now;
         this.date = DateOnly.FromDateTime(current);
-        this.lunar = Lunar.Lunar.FromDate(this.date.ToDateTime(new TimeOnly(6, 30)));
         this.hexagramToday = new HexagramProvider(this.date).GetHexagram();
     }
 
@@ -60,7 +61,14 @@ public partial class Index
     {
         get
         {
-            return $"{this.lunar.YearInGanZhi}年{this.lunar.MonthInChinese}月{this.lunar.DayInChinese} {this.date:yyyy/MM/dd}";
+            var dateTime = date.ToDateTime(new TimeOnly(6, 30));
+            var calendar = new ChineseLunisolarCalendar();
+            var nongliString =
+                $"{calendar.GetYearGanzhiInChinese(dateTime)}年" +
+                $"{calendar.GetMonthInChinese(dateTime)}月" +
+                $"{calendar.GetDayInChinese(dateTime)}";
+
+            return $"{nongliString} {dateTime:yyyy/MM/dd}";
         }
     }
 }

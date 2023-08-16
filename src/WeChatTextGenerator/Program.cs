@@ -1,5 +1,7 @@
-﻿using OneHexagramPerDayCore;
+﻿using ChineseLunisolarCalendarYjFwkExtensions.Extensions;
+using OneHexagramPerDayCore;
 using System.Diagnostics;
+using System.Globalization;
 using TextCopy;
 using WeChatTextGenerator;
 using YiJingFramework.Annotating.Zhouyi;
@@ -24,13 +26,19 @@ DocumentGenerator generator = new DocumentGenerator(outputDirectory, zhouyi);
 for (; ; )
 {
     var hexagram = new HexagramProvider(currentDate).GetHexagram();
-    var lunar = Lunar.Lunar.FromDate(currentDate.ToDateTime(new TimeOnly(6, 30)));
+
+    var dateTime = currentDate.ToDateTime(new TimeOnly(6, 30));
+    var calendar = new ChineseLunisolarCalendar();
+    var nongliTimeTitle = 
+        $"{calendar.GetYearGanzhiInChinese(dateTime)}年" +
+        $"{calendar.GetMonthInChinese(dateTime)}月" +
+        $"{calendar.GetDayInChinese(dateTime)}";
+
     Console.WriteLine();
-    Console.WriteLine(
-        $"正在为{lunar.YearInGanZhi}年{lunar.MonthInChinese}月{lunar.DayInChinese}日生成……");
+    Console.WriteLine($"正在为{nongliTimeTitle}生成……");
 
     outputDirectory.Delete(true);
-    generator.GenerateFor(hexagram, lunar);
+    generator.GenerateFor(hexagram, nongliTimeTitle);
     Console.WriteLine($"文件生成已完成。");
 
     var link = $"https://onehexagramperday.nololiyt.top/?p={hexagram}";
