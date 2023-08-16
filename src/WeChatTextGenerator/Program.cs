@@ -1,100 +1,51 @@
-﻿using OneHexagramPerDayCore;
+﻿using ChineseLunisolarCalendarYjFwkExtensions.Extensions;
+using OneHexagramPerDayCore;
 using System.Diagnostics;
-using System.Text;
+using System.Globalization;
+using TextCopy;
+using WeChatTextGenerator;
 using YiJingFramework.Annotating.Zhouyi;
-using YiJingFramework.Annotating.Zhouyi.Entities;
-using YiJingFramework.EntityRelationships.MostAccepted.GuaToCharacterExtensions;
-using YiJingFramework.PrimitiveTypes.GuaWithFixedCount;
 
-var current = DateTime.Now;
+var outputDirectory = new DirectoryInfo("./out");
+outputDirectory.Create();
+Console.WriteLine(
+    $"请注意，在生成后，剪切板的内容会被替换为要使用的原文链接。" +
+    $"同时，输出文件夹 {outputDirectory.FullName} 中的内容会被删除。");
 
-static DateOnly ParseToDateTime(string s, string? format = null)
+var currentDate = DateOnly.FromDateTime(DateTime.Now);
+Console.Write($"起始日期（默认为 {currentDate:yyyyMMdd} ）：");
+var startingDateInput = Console.ReadLine();
+if (!string.IsNullOrWhiteSpace(startingDateInput))
+    currentDate = DateOnly.ParseExact(startingDateInput, "yyyyMMdd");
+
+var storeContent = File.ReadAllText("./zhouyi.json");
+var zhouyi = ZhouyiStore.DeserializeFromJsonString(storeContent);
+Debug.Assert(zhouyi is not null);
+
+DocumentGenerator generator = new DocumentGenerator(outputDirectory, zhouyi);
+for (; ; )
 {
-    format = format ?? "yyyyMMdd";
-    return DateOnly.ParseExact(s, format);
-}
+    var hexagram = new HexagramProvider(currentDate).GetHexagram();
 
-var date = (args.Length is 0 ? "0" : args[0]) switch
-{
-    "1" => DateOnly.FromDateTime(current.AddDays(1)),
-    "2" => ParseToDateTime(args[1]),
-    _ => DateOnly.FromDateTime(current)
-};
+    var dateTime = currentDate.ToDateTime(new TimeOnly(6, 30));
+    var calendar = new ChineseLunisolarCalendar();
+    var nongliTimeTitle = 
+        $"{calendar.GetYearGanzhiInChinese(dateTime)}年" +
+        $"{calendar.GetMonthInChinese(dateTime)}月" +
+        $"{calendar.GetDayInChinese(dateTime)}";
 
-Console.OutputEncoding = Encoding.Unicode;
+    Console.WriteLine();
+    Console.WriteLine($"正在为{nongliTimeTitle}生成……");
 
-new Program(date).Run();
+    outputDirectory.Delete(true);
+    generator.GenerateFor(hexagram, nongliTimeTitle);
+    Console.WriteLine($"文件生成已完成。");
 
-internal partial class Program
-{
-    private readonly DateOnly date;
-    private readonly GuaHexagram hexagramPainting;
+    var link = $"https://onehexagramperday.nololiyt.top/?p={hexagram}";
+    ClipboardService.SetText(link);
+    Console.WriteLine($"原文链接 {link} 已自动复制。");
 
-    private readonly ZhouyiStoreWithLineTitles zhouyi;
-
-    internal Program(DateOnly date)
-    {
-        this.date = date;
-        this.hexagramPainting = new HexagramProvider(date).GetHexagram();
-
-        var storeContent = File.ReadAllText("./zhouyi.json");
-        var zhouyi = ZhouyiStore.DeserializeFromJsonString(storeContent);
-        Debug.Assert(zhouyi is not null);
-        this.zhouyi = new(zhouyi);
-    }
-
-    internal void Run()
-    {
-        var lunar = Lunar.Lunar.FromDate(this.date.ToDateTime(new TimeOnly(6, 30)));
-        var lunarStr = $"{lunar.YearInGanZhi}年{lunar.MonthInChinese}月{lunar.DayInChinese}";
-
-        Console.WriteLine("====日期================");
-        Console.WriteLine($"{this.date:yyyy/MM/dd}");
-        Console.WriteLine(lunarStr);
-        Console.WriteLine("========================");
-        Console.WriteLine();
-        Console.WriteLine();
-
-        ZhouyiHexagram hexagram = this.zhouyi[this.hexagramPainting];
-
-        var (upperPainting, lowerPainting) = hexagram.SplitToTrigrams();
-
-        ZhouyiTrigram upper = this.zhouyi.InnerStore.GetTrigram(upperPainting);
-        ZhouyiTrigram lower = this.zhouyi.InnerStore.GetTrigram(lowerPainting);
-
-        Console.WriteLine("====标题================");
-        Console.Write(this.hexagramPainting.ToUnicodeChar());
-        if (upperPainting == lowerPainting)
-            Console.WriteLine($" {hexagram.Name}为{upper.Nature} {lunarStr}");
-        else
-            Console.WriteLine($" {upper.Nature}{lower.Nature}{hexagram.Name} {lunarStr}");
-        Console.WriteLine("========================");
-        Console.WriteLine();
-        Console.WriteLine();
-
-        Console.WriteLine("====正文================");
-        Console.WriteLine(hexagram.Text);
-        Console.WriteLine(hexagram.Xiang);
-        Console.WriteLine(hexagram.Tuan);
-        Console.WriteLine();
-
-        foreach (var line in hexagram.EnumerateLines())
-        {
-            if (line.LineText is not null)
-            {
-                Console.WriteLine(line.LineText);
-                Console.WriteLine(line.Xiang);
-            }
-        }
-
-        Console.WriteLine("========================");
-        Console.WriteLine();
-        Console.WriteLine();
-
-        Console.WriteLine("====网址================");
-        Console.WriteLine($"https://onehexagramperday.nololiyt.top/?p={this.hexagramPainting}");
-        Console.WriteLine("========================");
-        Console.WriteLine();
-        Console.WriteLine();
-    }
+    Console.Write("生成完毕。回车以继续下一日：");
+    _ = Console.ReadLine();
+    currentDate = currentDate.AddDays(1);
 }
