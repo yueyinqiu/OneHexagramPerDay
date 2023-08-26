@@ -8,11 +8,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="ChineseLunisolarCalendarYjFwkExtensions" Version="1.1.0" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
     <PackageReference Include="TextCopy" Version="6.2.1" />
-    <PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="5.2.0" />
-    <PackageReference Include="YiJingFramework.EntityRelations" Version="2.1.0" />
+    <PackageReference Include="YiJingFramework.EntityRelations" Version="2.5.0" />
   </ItemGroup>
 
   <ItemGroup>
