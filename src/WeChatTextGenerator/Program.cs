@@ -1,9 +1,9 @@
 ﻿using OneHexagramPerDayCore;
-using OneHexagramPerDayCore.Extensions;
 using System.Diagnostics;
 using TextCopy;
 using WeChatTextGenerator;
 using YiJingFramework.Annotating.Zhouyi;
+using YiJingFramework.Nongli.Extensions;
 using YiJingFramework.Nongli.Lunar;
 
 var outputDirectory = new DirectoryInfo("./out");
@@ -28,7 +28,8 @@ for (; ; )
     var hexagram = new HexagramProvider(currentDate).GetHexagram();
 
     var dateTime = currentDate.ToDateTime(new TimeOnly(6, 30));
-    var nongliTimeTitle = LunarDateTime.FromGregorian(dateTime).DateToChinese();
+    var nongli = LunarDateTime.FromGregorian(dateTime);
+    var nongliTimeTitle = $"{nongli.Nian:C}年{nongli.YueInChinese()}月{nongli.RiInChinese()}";
 
     Console.WriteLine();
     Console.WriteLine($"正在为{nongliTimeTitle}生成……");

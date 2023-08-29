@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Components;
 using OneHexagramPerDayCore;
-using OneHexagramPerDayCore.Extensions;
 using YiJingFramework.EntityRelations.GuaCharacters.Extensions;
+using YiJingFramework.Nongli.Extensions;
 using YiJingFramework.Nongli.Lunar;
 using YiJingFramework.PrimitiveTypes.GuaWithFixedCount;
 
@@ -61,8 +61,9 @@ public partial class Index
         get
         {
             var dateTime = this.date.ToDateTime(new TimeOnly(6, 30));
-            var nongliString = LunarDateTime.FromGregorian(dateTime).DateToChinese();
-            return $"{nongliString} {dateTime:yyyy/MM/dd}";
+            var nongli = LunarDateTime.FromGregorian(dateTime);
+            return $"{nongli.Nian:C}年{nongli.YueInChinese()}月{nongli.RiInChinese()} " +
+                $"{dateTime:yyyy/MM/dd}";
         }
     }
 }
