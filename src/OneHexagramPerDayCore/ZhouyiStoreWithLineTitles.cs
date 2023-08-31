@@ -28,24 +28,24 @@ public sealed class ZhouyiStoreWithLineTitles
             hexagram.Xiang = $"象曰：{hexagram.Xiang}";
             hexagram.Tuan = $"彖曰：{hexagram.Tuan}";
 
-            foreach (var line in hexagram.EnumerateLines(false))
+            foreach (var line in hexagram.EnumerateYaos(false))
             {
                 Debug.Assert(line.YinYang.HasValue);
                 var yinyang = line.YinYang.Value.IsYang ? "九" : "六";
-                line.LineText = line.LineIndex switch
+                line.YaoText = line.YaoIndex switch
                 {
-                    1 => $"初{yinyang}：{line.LineText}",
-                    2 => $"{yinyang}二：{line.LineText}",
-                    3 => $"{yinyang}三：{line.LineText}",
-                    4 => $"{yinyang}四：{line.LineText}",
-                    5 => $"{yinyang}五：{line.LineText}",
-                    _ => $"上{yinyang}：{line.LineText}",
+                    1 => $"初{yinyang}：{line.YaoText}",
+                    2 => $"{yinyang}二：{line.YaoText}",
+                    3 => $"{yinyang}三：{line.YaoText}",
+                    4 => $"{yinyang}四：{line.YaoText}",
+                    5 => $"{yinyang}五：{line.YaoText}",
+                    _ => $"上{yinyang}：{line.YaoText}",
                 };
                 line.Xiang = $"象曰：{line.Xiang}";
             }
 
             var yong = hexagram.Yong;
-            if (yong.LineText is not null)
+            if (yong.YaoText is not null)
             {
                 string yinyang;
                 if (hexagram.Painting == qian)
@@ -55,7 +55,7 @@ public sealed class ZhouyiStoreWithLineTitles
                 else
                     yinyang = "";
 
-                yong.LineText = $"用{yinyang}：{yong.LineText}";
+                yong.YaoText = $"用{yinyang}：{yong.YaoText}";
                 yong.Xiang = $"象曰：{yong.Xiang}";
             }
 

@@ -1,10 +1,9 @@
 ﻿using Microsoft.AspNetCore.Components;
 using OneHexagramPerDayCore;
-using System.Globalization;
-using System;
 using YiJingFramework.EntityRelations.GuaCharacters.Extensions;
+using YiJingFramework.Nongli.Extensions;
+using YiJingFramework.Nongli.Lunar;
 using YiJingFramework.PrimitiveTypes.GuaWithFixedCount;
-using ChineseLunisolarCalendarYjFwkExtensions.Extensions;
 
 namespace BlazorApp.Pages;
 
@@ -61,14 +60,10 @@ public partial class Index
     {
         get
         {
-            var dateTime = date.ToDateTime(new TimeOnly(6, 30));
-            var calendar = new ChineseLunisolarCalendar();
-            var nongliString =
-                $"{calendar.GetYearGanzhiInChinese(dateTime)}年" +
-                $"{calendar.GetMonthInChinese(dateTime)}月" +
-                $"{calendar.GetDayInChinese(dateTime)}";
-
-            return $"{nongliString} {dateTime:yyyy/MM/dd}";
+            var dateTime = this.date.ToDateTime(new TimeOnly(6, 30));
+            var nongli = LunarDateTime.FromGregorian(dateTime);
+            return $"{nongli.Nian:C}年{nongli.YueInChinese()}月{nongli.RiInChinese()} " +
+                $"{dateTime:yyyy/MM/dd}";
         }
     }
 }

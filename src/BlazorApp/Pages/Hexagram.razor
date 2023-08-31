@@ -24,11 +24,11 @@ else
     </p>
 
     <p>
-        @foreach (var line in hexagram.EnumerateLines())
+        @foreach (var line in hexagram.EnumerateYaos())
         {
-            if (line.LineText is not null)
+            if (line.YaoText is not null)
             {
-                @line.LineText <br />
+                @line.YaoText <br />
                 @line.Xiang <br />
             }
         }

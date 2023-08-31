@@ -59,11 +59,11 @@ internal partial class DocumentGenerator
         AppendLine(body, hexagram.Xiang);
         AppendLine(body, hexagram.Tuan);
         AppendLine(body);
-        foreach (var line in hexagram.EnumerateLines())
+        foreach (var line in hexagram.EnumerateYaos())
         {
-            if (line.LineText is not null)
+            if (line.YaoText is not null)
             {
-                AppendLine(body, line.LineText);
+                AppendLine(body, line.YaoText);
                 AppendLine(body, line.Xiang);
             }
         }
