@@ -10,8 +10,8 @@
 	<ItemGroup>
 		<PackageReference Include="DocumentFormat.OpenXml" Version="2.20.0" />
 		<PackageReference Include="TextCopy" Version="6.2.1" />
-		<PackageReference Include="YiJingFramework.EntityRelations" Version="2.5.0" />
-		<PackageReference Include="YiJingFramework.Nongli" Version="1.1.0" />
+		<PackageReference Include="YiJingFramework.EntityRelations" Version="3.0.0" />
+		<PackageReference Include="YiJingFramework.Nongli" Version="2.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>

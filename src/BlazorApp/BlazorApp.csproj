@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
+﻿<Project Sdk="Microsoft.NET.Sdk.BlazorWebAssembly">
 
 	<PropertyGroup>
 		<TargetFramework>net7.0</TargetFramework>
@@ -12,8 +12,8 @@
 	<ItemGroup>
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.10" />
 		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all" />
-		<PackageReference Include="YiJingFramework.EntityRelations" Version="2.1.0" />
-		<PackageReference Include="YiJingFramework.Nongli" Version="1.1.0" />
+		<PackageReference Include="YiJingFramework.EntityRelations" Version="3.0.0" />
+		<PackageReference Include="YiJingFramework.Nongli" Version="2.0.1" />
 	</ItemGroup>
 
 	<ItemGroup>
