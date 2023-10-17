@@ -10,9 +10,9 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.10" />
-		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.10" PrivateAssets="all" />
-		<PackageReference Include="YiJingFramework.EntityRelations" Version="3.1.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly" Version="7.0.12" />
+		<PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.DevServer" Version="7.0.12" PrivateAssets="all" />
+		<PackageReference Include="YiJingFramework.EntityRelations" Version="3.2.0" />
 		<PackageReference Include="YiJingFramework.Nongli" Version="3.0.0" />
 	</ItemGroup>
 
