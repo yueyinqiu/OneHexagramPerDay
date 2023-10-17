@@ -38,7 +38,7 @@ for (; ; )
     generator.GenerateFor(hexagram, nongliTimeTitle);
     Console.WriteLine($"文件生成已完成。");
 
-    var link = $"https://onehexagramperday.nololiyt.top/?p={hexagram}";
+    var link = $"https://onehexagramperday.yueyinqiu.top/?p={hexagram}";
     ClipboardService.SetText(link);
     Console.WriteLine($"原文链接 {link} 已自动复制。");
 

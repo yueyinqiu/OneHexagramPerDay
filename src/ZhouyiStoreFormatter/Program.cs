@@ -1,5 +1,4 @@
 ﻿using System.Diagnostics;
-using System.Text.Json;
 using YiJingFramework.Annotating.Zhouyi;
 using YiJingFramework.Annotating.Zhouyi.Entities;
 
@@ -21,21 +20,9 @@ store.UpdateStore(new Xugua());
 store.UpdateStore(new Zagua());
 store.UpdateStore(new Xici());
 
-Directory.CreateDirectory("./For BlazorApp/data");
-var storeName = $"data/zhouyi-{DateTime.Now:yyyy-MM-dd}.json";
 await File.WriteAllTextAsync(
-    $"./For BlazorApp/{storeName}",
-    store.SerializeToJsonString());
-await File.WriteAllTextAsync(
-    $"./For BlazorApp/data/zhouyi-location.json",
-    JsonSerializer.Serialize(storeName));
-
-
-Directory.CreateDirectory("./For WeChatTextGenerator");
-await File.WriteAllTextAsync(
-    "./For WeChatTextGenerator/zhouyi.json",
+    "zhouyi.json",
     store.SerializeToJsonString(new()
     {
-        WriteIndented = true,
-        Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+        WriteIndented = true
     }));

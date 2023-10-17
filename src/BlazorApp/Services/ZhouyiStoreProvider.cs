@@ -14,11 +14,8 @@ namespace BlazorApp.Services
             {
                 BaseAddress = baseUri
             };
-            var zhouyiLocation = await httpClient.GetFromJsonAsync(
-                "data/zhouyi-location.json",
-                StringSerializerContext.Default.String);
             var store = await httpClient.GetFromJsonAsync(
-                "data/zhouyi-2023-08-02.json",
+                "zhouyi.json",
                 ZhouyiStoreSerializerContext.Default.ZhouyiStore);
             return store is null ?
                 throw new InvalidDataException("Failed to load the zhouyi store.") :
