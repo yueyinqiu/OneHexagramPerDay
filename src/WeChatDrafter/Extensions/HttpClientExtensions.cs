@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 namespace WeChatDrafter.Extensions;
 internal static class HttpClientExtensions
 {
-    private static readonly JsonSerializerOptions serializerOptions = new JsonSerializerOptions()
+    public static JsonSerializerOptions JsonSerializerOptions { get; } = new()
     {
         Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping
     };
@@ -20,7 +20,7 @@ internal static class HttpClientExtensions
         string url,
         TRequest value)
     {
-        var json = JsonSerializer.Serialize(value, serializerOptions);
+        var json = JsonSerializer.Serialize(value, JsonSerializerOptions);
         var content = new StringContent(json, MediaTypeHeaderValue.Parse("application/json"));
         var response = await client.PostAsync(url, content);
         return await response.Content.ReadFromJsonAsync<TResponse>();

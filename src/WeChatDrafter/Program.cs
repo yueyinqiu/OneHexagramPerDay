@@ -171,7 +171,7 @@ List<DateOnly> dates;
             guaTitle = $"{upper.Nature}{lower.Nature}{hexagram.Name}";
 
         var contentBuilder = new StringBuilder();
-        contentBuilder.Append("<div style=\"line-height: 1.75em;\">");
+        _ = contentBuilder.Append("<div style=\"line-height: 1.75em;\">");
         {
             var s = hexagram.Text?.Split('：');
 
@@ -205,10 +205,9 @@ List<DateOnly> dates;
 
                 _ = contentBuilder.Append(line.Xiang);
                 _ = contentBuilder.Append("<br>");
-                _ = contentBuilder.Append("<br>");
             }
         }
-        contentBuilder.Append("</div>");
+        _ = contentBuilder.Append("</div>");
 
         var request = new
         {
@@ -236,6 +235,8 @@ List<DateOnly> dates;
         {
             Console.WriteLine("草稿创建失败，具体响应为：");
             Console.WriteLine(response);
+            Console.WriteLine("发送的信息为：");
+            Console.WriteLine(request);
             return;
         }
     }
