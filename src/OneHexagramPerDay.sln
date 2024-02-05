@@ -7,9 +7,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeChatTextGenerator", "WeCh
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZhouyiStoreFormatter", "ZhouyiStoreFormatter\ZhouyiStoreFormatter.csproj", "{835EF230-0D8A-4195-BD6E-72B39DB43220}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OneHexagramPerDayCore", "OneHexagramPerDayCore\OneHexagramPerDayCore.csproj", "{64EB1127-D18B-42B4-AF65-004471A9106C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneHexagramPerDayCore", "OneHexagramPerDayCore\OneHexagramPerDayCore.csproj", "{64EB1127-D18B-42B4-AF65-004471A9106C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{DA35F4B1-1963-465B-B0CF-4258E06F13DA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{DA35F4B1-1963-465B-B0CF-4258E06F13DA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeChatDrafter", "WeChatDrafter\WeChatDrafter.csproj", "{4D75C65D-DA1C-4CCC-97C0-8E8275D02785}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +35,10 @@ Global
 		{DA35F4B1-1963-465B-B0CF-4258E06F13DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA35F4B1-1963-465B-B0CF-4258E06F13DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA35F4B1-1963-465B-B0CF-4258E06F13DA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4D75C65D-DA1C-4CCC-97C0-8E8275D02785}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4D75C65D-DA1C-4CCC-97C0-8E8275D02785}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4D75C65D-DA1C-4CCC-97C0-8E8275D02785}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4D75C65D-DA1C-4CCC-97C0-8E8275D02785}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
