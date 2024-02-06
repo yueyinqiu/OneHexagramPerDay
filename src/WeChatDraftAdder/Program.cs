@@ -2,6 +2,7 @@
 using System.Data;
 using System.Net.Http.Json;
 using System.Text;
+using System.Text.Json;
 using System.Text.Json.Nodes;
 using WeChatDraftAdder.Extensions;
 using YiJingFramework.Annotating.Zhouyi;
@@ -224,7 +225,9 @@ List<DateOnly> dates;
             Console.WriteLine("草稿创建失败，具体响应为：");
             Console.WriteLine(response);
             Console.WriteLine("发送的信息为：");
-            Console.WriteLine(request);
+            Console.WriteLine(JsonSerializer.Serialize(
+                request, 
+                HttpClientExtensions.JsonSerializerOptions));
             return;
         }
     }
