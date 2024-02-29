@@ -31,7 +31,7 @@ string accessToken;
     if (result is null)
     {
         Console.WriteLine("令牌解析失败，具体响应为：");
-        Console.WriteLine(result);
+        Console.WriteLine(response);
         return;
     }
     accessToken = result;
