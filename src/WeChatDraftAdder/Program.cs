@@ -208,7 +208,7 @@ List<DateOnly> dates;
                     content = contentBuilder.ToString(),
                     content_source_url = $"https://onehexagramperday.yueyinqiu.top/?p={gua}",
                     thumb_media_id = "ZVlt-CLS2_hum7At1kporE6viau0_PbRNQdcD9vopWxuxGwtZskatwe07c2JOzrQ",
-                    // need_open_comment = 0,
+                    need_open_comment = 1,
                     // only_fans_can_comment = 0,
                     // pic_crop_235_1 = "X1_Y1_X2_Y2",
                     // pic_crop_1_1 = "X1_Y1_X2_Y2",
