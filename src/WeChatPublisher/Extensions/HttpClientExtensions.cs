@@ -2,7 +2,7 @@
 using System.Net.Http.Json;
 using System.Text.Json;
 
-namespace WeChatDraftAdder.Extensions;
+namespace WeChatPublisher.Extensions;
 public static class HttpClientExtensions
 {
     public static JsonSerializerOptions JsonSerializerOptions { get; } = new()

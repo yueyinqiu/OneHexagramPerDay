@@ -226,7 +226,7 @@ List<DateOnly> dates;
             Console.WriteLine(response);
             Console.WriteLine("发送的信息为：");
             Console.WriteLine(JsonSerializer.Serialize(
-                request, 
+                request,
                 HttpClientExtensions.JsonSerializerOptions));
             return;
         }

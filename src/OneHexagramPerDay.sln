@@ -13,6 +13,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeChatDraftAdder", "WeChatD
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeChatDraftDeleter", "WeChatDraftDeleter\WeChatDraftDeleter.csproj", "{ACFCB942-C4EB-472A-9DFC-B363539FAD56}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeChatPublisher", "WeChatPublisher\WeChatPublisher.csproj", "{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -39,6 +41,10 @@ Global
 		{ACFCB942-C4EB-472A-9DFC-B363539FAD56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACFCB942-C4EB-472A-9DFC-B363539FAD56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACFCB942-C4EB-472A-9DFC-B363539FAD56}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
