@@ -26,10 +26,13 @@ internal class Program
         return new WeChatRequester(appId!, appSecret!);
     }
 
-    private static Task DelayUntil(DateTime dateTime)
+    private static async Task<bool> DelayUntil(DateTime dateTime)
     {
         var difference = dateTime - DateTime.Now;
-        return Task.Delay(difference);
+        if (difference < TimeSpan.Zero)
+            return false;
+        await Task.Delay(difference);
+        return true;
     }
 
     private static ZhouyiStoreWithLineTitles LoadZhouyi()
@@ -64,57 +67,75 @@ internal class Program
             _ = await weChat.GetTokenAsync(true);
 
             Console.Clear();
-            Console.WriteLine("检验完成。将从明天开始正式运行。");
+            Console.WriteLine("检验完成。");
 
-            DateOnly date = DateOnly.FromDateTime(DateTime.Now);
-            for (; ; )
+            for (var date = DateOnly.FromDateTime(DateTime.Now); ; date = date.AddDays(1))
             {
-                date = date.AddDays(1);
-
-                for (int i = 0; i <= 6; i += 2)
                 {
-                    var next = date.ToDateTime(new TimeOnly(i, 0));
+                    var next = date.ToDateTime(new TimeOnly(6, 0));
                     Console.WriteLine($"下次触发心跳：{next}");
-                    await DelayUntil(next);
-                    await mail.SendHeartbeatAsync();
-                    Console.WriteLine($"心跳完成。");
+                    if (await DelayUntil(next))
+                    {
+                        await mail.SendHeartbeatAsync(next);
+                        Console.WriteLine($"心跳完成。");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"已跳过。");
+                    }
                 }
 
-                string draft;
-
                 {
-                    var next = date.ToDateTime(new TimeOnly(6, 15));
+                    var next = date.ToDateTime(new TimeOnly(6, 25));
                     Console.WriteLine($"即将发布草稿：{next}");
-                    await DelayUntil(next);
+                    if (await DelayUntil(next))
+                    {
+                        _ = await weChat.GetTokenAsync(true);
+                        var draft = await weChat.UploadDraft(zhouyi, date);
+                        Console.WriteLine($"草稿完成。");
 
-                    _ = await weChat.GetTokenAsync(true);
-                    draft = await weChat.UploadDraft(zhouyi, date);
-                    Console.WriteLine($"草稿完成。");
+                        next = date.ToDateTime(new TimeOnly(6, 30));
+                        Console.WriteLine($"即将发布：{next}");
+                        _ = await DelayUntil(next);
+                        await weChat.Publish(draft);
+                        Console.WriteLine($"发布完成。");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"已跳过。");
+                    }
                 }
 
                 {
-                    var next = date.ToDateTime(new TimeOnly(6, 30));
-                    Console.WriteLine($"即将发布：{next}");
-                    await DelayUntil(next);
-
-                    await weChat.Publish(draft);
-                    Console.WriteLine($"发布完成。");
-                }
-
-                for (int i = 8; i <= 22; i += 2)
-                {
-                    var next = date.ToDateTime(new TimeOnly(i, 0));
+                    var next = date.ToDateTime(new TimeOnly(22, 0));
                     Console.WriteLine($"下次触发心跳：{next}");
-                    await DelayUntil(next);
-                    await mail.SendHeartbeatAsync();
-                    Console.WriteLine($"心跳完成。");
+                    if (await DelayUntil(next))
+                    {
+                        await mail.SendHeartbeatAsync(next);
+                        Console.WriteLine($"心跳完成。");
+                    }
+                    else
+                    {
+                        Console.WriteLine($"已跳过。");
+                    }
                 }
             }
         }
         catch (Exception ex)
         {
-            await mail.SendExceptionAsync(ex);
-            Console.WriteLine("出现错误。内容已发送到邮箱。程序已停止。");
+            try
+            {
+                await mail.SendExceptionAsync(ex);
+                Console.WriteLine("出现错误。内容已发送到邮箱。程序已停止。");
+            }
+            catch (Exception mailEx)
+            {
+                Console.WriteLine("出现错误，且邮件发送失败。出现的错误为：");
+                Console.WriteLine(ex);
+                Console.WriteLine("邮件发送失败的错误为：");
+                Console.WriteLine(mailEx);
+                Console.WriteLine("程序已停止。");
+            }
             return;
         }
     }

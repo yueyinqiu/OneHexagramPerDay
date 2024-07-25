@@ -24,25 +24,44 @@ public sealed class MailSender : IDisposable
 
     public void Dispose() => this.client.Dispose();
 
-    public Task SendAsync(string subject, string body, string? recipients = null)
+    public async Task SendAsync(string subject, string body, string? recipients = null)
     {
         recipients ??= this.userName;
-        return this.client.SendMailAsync(this.userName, recipients, subject, body);
+        try
+        {
+            await this.client.SendMailAsync(this.userName, recipients, subject, body);
+        }
+        catch
+        {
+            // 重试一次
+            await Task.Delay(TimeSpan.FromSeconds(10));
+            await this.client.SendMailAsync(this.userName, recipients, subject, body);
+        }
     }
+    public Task SendStartupMessageAsync(
+        string subject = "程序启动 - OneHexagramPerDay WeChatPublisher",
+        string body = "这封邮件是用以测试相关功能是否正常的。",
+        string? recipients = null)
+    {
+        return SendAsync(subject, body.ToString(), recipients);
+    }
+
     public Task SendExceptionAsync(
         Exception body,
         string subject = "异常 - OneHexagramPerDay WeChatPublisher",
         string? recipients = null)
     {
-        recipients ??= this.userName;
-        return this.client.SendMailAsync(this.userName, recipients, subject, body.ToString());
+        return SendAsync(subject, body.ToString(), recipients);
     }
+
     public Task SendHeartbeatAsync(
+        DateTime body,
         string subject = "心跳 - OneHexagramPerDay WeChatPublisher",
-        string body = "OneHexagramPerDay WeChatPublisher 的心跳包",
         string? recipients = null)
     {
-        recipients ??= this.userName;
-        return this.client.SendMailAsync(this.userName, recipients, subject, body.ToString());
+        return SendAsync(
+            subject, 
+            $"来自 OneHexagramPerDay WeChatPublisher 的心跳包。期望时间为 {body} 。",
+            recipients);
     }
 }
