@@ -14,21 +14,32 @@ public sealed class WeChatRequester(string appId, string appSecret) : IDisposabl
 
     public void Dispose() => this.httpClient.Dispose();
 
+    private (string token, DateTime expire) cachedToken = ("", DateTime.MinValue);
+
     public async Task<string> GetTokenAsync(bool force = false)
     {
         var response = await this.httpClient.GetFromJsonAsync<JsonObject>(
             $"https://api.weixin.qq.com/cgi-bin/token?" +
             $"grant_type=client_credential&" +
             $"appid={appId}&" +
-            $"secret={appSecret}");
+            $"secret={appSecret}&" +
+            $"avoidcache={Guid.NewGuid():N}");
 
-        var result = response?["access_token"]?.GetValue<string>();
-        if (result is null)
+        if (!force && this.cachedToken.expire > DateTime.Now + TimeSpan.FromMinutes(10))
+            return this.cachedToken.token;
+
+        var token = response?["access_token"]?.GetValue<string>();
+        if (token is null)
         {
             throw new Exception(
                 $"令牌解析失败，具体响应为：{Environment.NewLine}{response}");
         }
-        return result;
+
+        var expireSeconds = response?["expires_in"]?.GetValue<int>();
+        if (expireSeconds.HasValue)
+            this.cachedToken = (token, DateTime.Now.AddSeconds(expireSeconds.Value));
+
+        return token;
     }
 
     public async Task<string> UploadDraft(ZhouyiStoreWithLineTitles zhouyi, DateOnly date)
