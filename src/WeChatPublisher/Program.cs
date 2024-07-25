@@ -44,12 +44,10 @@ internal class Program
 
     public static async Task Main()
     {
-        using var mail = InputMail();
+        var mail = InputMail();
         try
         {
-            await mail.SendAsync(
-                "测试邮件 - OneHexagramPerDay WeChatPublisher",
-                "这是一封测试邮件。");
+            await mail.SendStartupMessageAsync();
         }
         catch (Exception ex)
         {
@@ -86,7 +84,7 @@ internal class Program
                 }
 
                 {
-                    var next = date.ToDateTime(new TimeOnly(6, 25));
+                    var next = date.ToDateTime(new TimeOnly(6, 20));
                     Console.WriteLine($"即将发布草稿：{next}");
                     if (await DelayUntil(next))
                     {

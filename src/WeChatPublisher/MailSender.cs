@@ -2,42 +2,31 @@
 using System.Net.Mail;
 
 namespace WeChatPublisher;
-public sealed class MailSender : IDisposable
+public sealed class MailSender(
+    string userName, string password, string smtpAddress, int? smtpPort = null)
 {
-    private readonly SmtpClient client;
-    private readonly string userName;
-
-    public MailSender(
-        string userName,
-        string password,
-        string smtpAddress,
-        int? smtpPort = null)
+    public async Task SendAsync(string subject, string body, string? recipients = null)
     {
-        this.client = smtpPort.HasValue ?
+        using var client = smtpPort.HasValue ?
            new SmtpClient(smtpAddress, smtpPort.Value) :
            new SmtpClient(smtpAddress);
         this.client.UseDefaultCredentials = false;
         this.client.EnableSsl = true;
         this.client.Credentials = new NetworkCredential(userName, password);
-        this.userName = userName;
-    }
 
-    public void Dispose() => this.client.Dispose();
-
-    public async Task SendAsync(string subject, string body, string? recipients = null)
-    {
-        recipients ??= this.userName;
+        recipients ??= userName;
         try
         {
-            await this.client.SendMailAsync(this.userName, recipients, subject, body);
+            await this.client.SendMailAsync(userName, recipients, subject, body);
         }
         catch
         {
             // 重试一次
             await Task.Delay(TimeSpan.FromSeconds(10));
-            await this.client.SendMailAsync(this.userName, recipients, subject, body);
+            await this.client.SendMailAsync(userName, recipients, subject, body);
         }
     }
+
     public Task SendStartupMessageAsync(
         string subject = "程序启动 - OneHexagramPerDay WeChatPublisher",
         string body = "这封邮件是用以测试相关功能是否正常的。",
