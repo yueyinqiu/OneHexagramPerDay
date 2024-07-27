@@ -11,9 +11,7 @@ internal class Program
         Console.Write("请输入 Outlook 邮箱密码：");
         var password = Console.ReadLine();
 
-        return new MailSender(
-            userName!,
-            password!, "smtp-mail.outlook.com", 587);
+        return new MailSender(userName!, password!);
     }
 
     private static WeChatRequester InputWeChat()
@@ -69,11 +67,13 @@ internal class Program
 
             for (var date = DateOnly.FromDateTime(DateTime.Now); ; date = date.AddDays(1))
             {
+                for (int i = 0; i <= 6; i++)
                 {
-                    var next = date.ToDateTime(new TimeOnly(6, 0));
+                    var next = date.ToDateTime(new TimeOnly(i, 0));
                     Console.WriteLine($"下次触发心跳：{next}");
                     if (await DelayUntil(next))
                     {
+                        _ = await weChat.GetTokenAsync(false);
                         await mail.SendHeartbeatAsync(next);
                         Console.WriteLine($"心跳完成。");
                     }
@@ -104,11 +104,13 @@ internal class Program
                     }
                 }
 
+                for (int i = 7; i <= 23; i++)
                 {
-                    var next = date.ToDateTime(new TimeOnly(22, 0));
+                    var next = date.ToDateTime(new TimeOnly(i, 0));
                     Console.WriteLine($"下次触发心跳：{next}");
                     if (await DelayUntil(next))
                     {
+                        _ = await weChat.GetTokenAsync(false);
                         await mail.SendHeartbeatAsync(next);
                         Console.WriteLine($"心跳完成。");
                     }

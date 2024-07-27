@@ -134,15 +134,25 @@ public sealed class WeChatRequester(string appId, string appSecret) : IDisposabl
     {
         var request = new
         {
-            media_id = draft
+            filter = new
+            {
+                is_to_all = true,
+                // tag_id = 2
+            },
+            msgtype = "mpnews",
+            mpnews = new
+            {
+                media_id = draft
+            },
+            send_ignore_reprint = 1
         };
         var accessToken = await this.GetTokenAsync();
         var response = await this.httpClient.PostAsWeChatThenFromJson<dynamic, JsonObject>(
-            $"https://api.weixin.qq.com/cgi-bin/freepublish/submit?" +
+            $"https://api.weixin.qq.com/cgi-bin/message/mass/sendall?" +
             $"access_token={accessToken}",
             request);
-        var publishId = response?["publish_id"]?.GetValue<string>();
-        if (publishId is null)
+        var msgId = response?["msg_id"]?.GetValue<int>();
+        if (msgId is null)
         {
             throw new Exception(
                 $"发布失败，具体响应为：{Environment.NewLine}" +
@@ -159,17 +169,17 @@ public sealed class WeChatRequester(string appId, string appSecret) : IDisposabl
 
             var checkRequest = new
             {
-                publish_id = draft
+                msg_id = msgId.ToString()
             };
 
             accessToken = await this.GetTokenAsync();
             var checkResponse = await this.httpClient.PostAsWeChatThenFromJson<dynamic, JsonObject>(
-                $"https://api.weixin.qq.com/cgi-bin/freepublish/get?" +
+                $"https://api.weixin.qq.com/cgi-bin/message/mass/get?" +
                 $"access_token={accessToken}",
                 request);
 
-            var publishStatus = checkResponse?["publish_status"]?.GetValue<int>();
-            if (publishStatus is null)
+            var msgStatus = checkResponse?["msg_status"]?.GetValue<string>();
+            if (msgStatus is null)
             {
                 throw new Exception(
                     $"发布成功，但发布检查失败，具体响应为：{Environment.NewLine}" +
@@ -186,10 +196,10 @@ public sealed class WeChatRequester(string appId, string appSecret) : IDisposabl
                         HttpClientExtensions.JsonSerializerOptions)}{Environment.NewLine}");
             }
 
-            if (publishStatus == 0)
+            if (msgStatus == "SEND_SUCCESS")
                 return;
 
-            if (publishStatus == 1)
+            if (msgStatus == "SENDING")
                 continue;
 
             throw new Exception(
