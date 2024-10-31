@@ -1,13 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net8.0</TargetFramework>
+		<Nullable>enable</Nullable>
+		<ImplicitUsings>enable</ImplicitUsings>
 
-  <ItemGroup>
-    <PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="7.0.1" />
-  </ItemGroup>
+		<AssemblyName>Yueyinqiu.Su.OneHexagramPerDayCore</AssemblyName>
+		<RootNamespace>$(AssemblyName)</RootNamespace>
+		<IsTrimmable>true</IsTrimmable>
+
+		<Version>0.0.1</Version>
+		<PackageId>$(AssemblyName)</PackageId>
+		<PackageRequireLicenseAcceptance>False</PackageRequireLicenseAcceptance>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<RepositoryUrl>https://github.com/yueyinqiu/OneHexagramPerDay.git</RepositoryUrl>
+		<RepositoryType>git</RepositoryType>
+		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+		<Authors>yueyinqiu</Authors>
+	</PropertyGroup>
+
+
+	<ItemGroup>
+		<PackageReference Include="YiJingFramework.Annotating.Zhouyi" Version="7.0.1" />
+	</ItemGroup>
 
 </Project>
