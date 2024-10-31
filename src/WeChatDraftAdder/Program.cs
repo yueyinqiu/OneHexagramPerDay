@@ -206,7 +206,7 @@ List<DateOnly> dates;
                     // author = "author",
                     digest = hexagram.Text?.Split('：')[1],
                     content = contentBuilder.ToString(),
-                    content_source_url = $"https://onehexagramperday.yueyinqiu.top/?p={gua}",
+                    content_source_url = $"https://tools.yueyinqiu.top/OneHexagramPerDay?DefaultGua={gua}",
                     thumb_media_id = "ZVlt-CLS2_hum7At1kporE6viau0_PbRNQdcD9vopWxuxGwtZskatwe07c2JOzrQ",
                     need_open_comment = 1,
                     // only_fans_can_comment = 0,

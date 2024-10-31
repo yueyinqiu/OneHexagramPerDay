@@ -4,9 +4,9 @@
 		<TargetFramework>net8.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
-
+		
 		<AssemblyName>Yueyinqiu.Su.OneHexagramPerDayCore</AssemblyName>
-		<RootNamespace>$(AssemblyName)</RootNamespace>
+		<RootNamespace>OneHexagramPerDayCore</RootNamespace>
 		<IsTrimmable>true</IsTrimmable>
 
 		<Version>0.0.1</Version>
