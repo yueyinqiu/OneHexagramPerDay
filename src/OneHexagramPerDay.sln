@@ -7,13 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ZhouyiStoreFormatter", "Zho
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OneHexagramPerDayCore", "OneHexagramPerDayCore\OneHexagramPerDayCore.csproj", "{64EB1127-D18B-42B4-AF65-004471A9106C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorApp", "BlazorApp\BlazorApp.csproj", "{DA35F4B1-1963-465B-B0CF-4258E06F13DA}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeChatDraftAdder", "WeChatDraftAdder\WeChatDraftAdder.csproj", "{AD8684CB-B45C-4696-8D56-5FD05271801D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WeChatDraftDeleter", "WeChatDraftDeleter\WeChatDraftDeleter.csproj", "{ACFCB942-C4EB-472A-9DFC-B363539FAD56}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WeChatPublisher", "WeChatPublisher\WeChatPublisher.csproj", "{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,10 +25,6 @@ Global
 		{64EB1127-D18B-42B4-AF65-004471A9106C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64EB1127-D18B-42B4-AF65-004471A9106C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64EB1127-D18B-42B4-AF65-004471A9106C}.Release|Any CPU.Build.0 = Release|Any CPU
-		{DA35F4B1-1963-465B-B0CF-4258E06F13DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{DA35F4B1-1963-465B-B0CF-4258E06F13DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{DA35F4B1-1963-465B-B0CF-4258E06F13DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{DA35F4B1-1963-465B-B0CF-4258E06F13DA}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AD8684CB-B45C-4696-8D56-5FD05271801D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{AD8684CB-B45C-4696-8D56-5FD05271801D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD8684CB-B45C-4696-8D56-5FD05271801D}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -41,10 +33,6 @@ Global
 		{ACFCB942-C4EB-472A-9DFC-B363539FAD56}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{ACFCB942-C4EB-472A-9DFC-B363539FAD56}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{ACFCB942-C4EB-472A-9DFC-B363539FAD56}.Release|Any CPU.Build.0 = Release|Any CPU
-		{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{AB5CE1F7-1DA4-4A51-8696-14C02D4932AF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
